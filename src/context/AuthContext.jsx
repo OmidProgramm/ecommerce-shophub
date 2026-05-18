@@ -1,6 +1,6 @@
-import { createContext, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
-export const AuthContext = createContext(null);
+const AuthContext = createContext(null);
 
 const AuthProvider = ({children}) => {
     const [user, setUser] = useState(localStorage.getItem("currentUserEmail")? {email:localStorage.getItem("currentUserEmail")}:null);
@@ -43,3 +43,8 @@ const AuthProvider = ({children}) => {
 }
 
 export default AuthProvider
+
+export function useAuth(){
+    const context = useContext(AuthContext);
+    return context;
+}

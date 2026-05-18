@@ -1,17 +1,27 @@
-import React, { useContext, useState } from 'react'
+import React, {  useContext, useState } from 'react'
 import { useForm } from 'react-hook-form';
-import { AuthContext } from '../context/AuthContext';
+import  { AuthContext } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
 const Auth = () => {
   const [mode, setMode] = useState("signup");
+  const [error, setError] = useState(null);
+  const navigate = useNavigate()
+  const {register, handleSubmit, formState:{errors}} = useForm();
   const {user,signUp,logout,login} = useContext(AuthContext);
 
-  const {register, handleSubmit, formState:{errors}} = useForm();
-
   const onSubmit=(data)=>{
-    if(mode ==='signup'){
-      signUp(data.email,data.password);
+    setError(null);
+    let result;
+    if(mode === "signup"){
+      result = signUp(data.email,data.password);
     }else{
-      login(data.email,data.password);
+     result= login(data.email,data.password);
+    }
+    if(result.success){
+      navigate('/');
+    }else{
+      setError(result.error);
     }
   }
 
@@ -19,10 +29,11 @@ const Auth = () => {
     <div className="page">
       <div className="container">
         <div className="auth-container">
-          {user && <p>user logged in: {user.email}</p>}
+          {user && <span>User logged in: {user.email}</span>}
           <button onClick={()=>logout()}>Logout</button>
           <h1 className='page-title'>{mode === "signup"?"Sign Up":"Login"}</h1>
           <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
+            {error && <span className='error-message'>{error}</span>}
             <div className='form-group'>
               <label className='form-label' htmlFor='email'>Email</label>
               <input  className='form-input'type='email' id='email' {...register('email',{required:'Email is required'})}/>
@@ -45,8 +56,8 @@ const Auth = () => {
           </form>
           <div className="auth-switch">
             {
-              mode === "signup"?(<p>Already habe an account? <span className='auth-link' onClick={()=>setMode('login')}>Login</span></p>):
-              (<p>Don't habe an account? <span className='auth-link' onClick={()=>setMode('signup')}>Sign Up</span></p>)
+              mode === "signup"?(<p>Already has an account? <span className='auth-link cursor' onClick={()=>setMode('login')}>Login</span></p>):
+              (<p>Don't has an account? <span className='auth-link cursor' onClick={()=>setMode('signup')}>Sign Up</span></p>)
             }
             
           </div>

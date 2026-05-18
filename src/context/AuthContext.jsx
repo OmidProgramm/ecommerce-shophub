@@ -3,34 +3,38 @@ import { createContext, useState } from 'react'
 export const AuthContext = createContext(null);
 
 const AuthProvider = ({children}) => {
-    const [user, setUser] = useState(localStorage.getItem('currentUserEmail')? {email:localStorage.getItem('currentUserEmail')}:null);
-    const signUp = (email,password)=>{
-        const users = JSON.parse(localStorage.getItem('users') || "[]");
-        if(users.find((u)=>u.email===email)){
-            return {success: false, error: "Email already exists"};
+    const [user, setUser] = useState(localStorage.getItem("currentUserEmail")? {email:localStorage.getItem("currentUserEmail")}:null);
+    
+    const signUp =(email, password)=>{
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+        if(users.find((u)=>u.email === email)){
+            return {success: false, error: "Email is already exist"}
         }
-        const newUsers= {email,password};
-        users.push(newUsers);
-        localStorage.setItem('users',JSON.stringify(users));
-        localStorage.setItem('currentUserEmail',email);
-        setUser({email})
-        return {success:true};
+        const newUser = {email,password};
+        users.push(newUser);
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("currentUserEmail", email);
+        setUser({email});
+        return {success: true};
     }
     const login = (email,password)=>{
-        const users = JSON.parse(localStorage.getItem('users') || "[]");
-        const user = users.find((u)=>u.email===email && u.password === password);
+        const users = JSON.parse(localStorage.getItem("users") || "[]");
+        const user = users.find((u)=>u.email === email && u.password === password)
         if(!user){
-            return {success:false, error: "Invalid email or password"};
+            return {success: false, error: "Invalid Email or Password"}
         }
-        localStorage.setItem('currentUserEmail',email);
+        localStorage.setItem("currentUserEmail", email);
         setUser({email});
+        return {success: true};
+    }
 
-        return{success:true};
-    }
     const logout = ()=>{
-        localStorage.removeItem('currentUserEmail');
-        setUser(null)
+        localStorage.removeItem("currentUserEmail");
+        setUser(null);
     }
+
+
+   
   return (
     <AuthContext.Provider value={{user,signUp,logout,login}}>
        {children}

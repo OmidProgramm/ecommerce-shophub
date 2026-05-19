@@ -15,6 +15,7 @@ const Auth = () => {
     let result;
     if(mode === "signup"){
       result = signUp(data.email,data.password);
+      
     }else{
      result= login(data.email,data.password);
     }

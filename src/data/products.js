@@ -18,7 +18,7 @@ const products = [
   {
     id: 3,
     name: "Laptop Stand",
-    price: 249.99,
+    price: 449.99,
     image:`${import.meta.env.BASE_URL}images/laptop.jpg`,
     description:
       "Ergonomic aluminum laptop stand that improves posture and workspace organization. Adjustable height and angle.",

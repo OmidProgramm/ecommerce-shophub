@@ -8,6 +8,7 @@ const ProductDetails = () => {
   const {id} = useParams();
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
+  const {cartItems,addToCart} = useCart();
 
   useEffect(()=>{
     const foundProduct = getProductById(id);
@@ -15,11 +16,13 @@ const ProductDetails = () => {
       navigate('/');
       return
     }
-    setProduct(foundProduct)
+    setProduct(foundProduct);
     
   },[id]);
+  
   if(!product){ return <h1>Loading...</h1>}
-  const {cartItems,addToCart} = useCart();
+
+  
   const productInCart = cartItems.find((item)=>item.id === product.id);
   const productQuantityLabel = productInCart? `(${productInCart.quantity})`:'';
 
